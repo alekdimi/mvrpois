@@ -1,0 +1,19 @@
+Package: mvrpois
+Type: Package
+Title: Simulate, sample, and fit a multivariate Poisson distribution
+Version: 0.1.0
+Author: Aleksandar Dimitriev
+Maintainer: Aleksandar Dimitriev <alek@thenaivebayesian.com>
+Description: A package for the multivariate Poisson distribution defined in:
+    Karlis and Meligkotsidou. "Multivariate Poisson regression with covariance
+    structure." Statistics and Computing 15.4 (2005): 255-265. Contains functions to
+    sample from an MVP and to fit an MVP to existing data.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+ByteCompile: true
+Suggests:
+    testthat
+Depends:
+    mcmc
+RoxygenNote: 5.0.1
