@@ -4,14 +4,14 @@
 \alias{mvp.sample}
 \title{mvp.sample}
 \usage{
-mvp.sample(n, theta.means, theta.covs)
+mvp.sample(theta.means, theta.covs, N = NULL)
 }
 \arguments{
-\item{n}{number of samples to be drawn}
-
 \item{theta.means}{underlying Poisson rates for the mean}
 
 \item{theta.covs}{underlying Poisson rates for the covariance}
+
+\item{N}{number of samples to be drawn}
 }
 \value{
 n-by-m matrix of n m-variate Poisson samples, where m is of size y1

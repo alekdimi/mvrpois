@@ -15,5 +15,5 @@ ByteCompile: true
 Suggests:
     testthat
 Depends:
-    mcmc
+    rstan
 RoxygenNote: 5.0.1

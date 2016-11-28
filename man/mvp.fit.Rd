@@ -4,16 +4,17 @@
 \alias{mvp.fit}
 \title{mvp.fit}
 \usage{
-mvp.fit(X, Z = NULL, N1 = 100, N2 = 100)
+mvp.fit(method, X, Z = NULL, verbose = FALSE, ...)
 }
 \arguments{
+\item{method}{"HMC" or "Gibbs"}
+
 \item{X}{n-by-m matrix of n m-variate Poisson samples}
 
 \item{Z}{n-by-m matrix of covariates for the mean latent rates}
-
-\item{N1}{number of samples}
-
-\item{N2}{number of steps in Metropolis Hastings}
+}
+\value{
+results of the sampling method
 }
 \description{
 mvp.fit

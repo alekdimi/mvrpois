@@ -4,10 +4,10 @@
 \alias{mvp.prob}
 \title{mvp.prob}
 \usage{
-mvp.prob(x, theta, method, logarithm, n.mc = 10000)
+mvp.prob(X, theta, method, logarithm, n.mc = 10000)
 }
 \arguments{
-\item{x}{MVP sample}
+\item{X}{MVP sample}
 
 \item{theta}{underlying Poisson rates}
 

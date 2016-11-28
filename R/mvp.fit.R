@@ -2,25 +2,49 @@
 #'
 #' @param X n-by-m matrix of n m-variate Poisson samples
 #' @param Z n-by-m matrix of covariates for the mean latent rates
-#' @param N1 number of samples
-#' @param N2 number of steps in Metropolis Hastings
+#' @param method "HMC" or "Gibbs"
 #'
-#' @return
+#' @return results of the sampling method
 #' @export
 #'
 #' @examples
-mvp.fit <- function(X, Z = NULL, N1 = 100, N2 = 100) {
+mvp.fit <- function(method, X, Z = NULL, verbose = FALSE, ...) {
+  switch(method,
+         HMC = {
+           model <- ifelse(is.null(Z), '../Stan/karlis.stan', '../Stan/karlis.covariates.stan')
+           A <- mvp.matrix(ncol(X))
+           data <- list(N = nrow(X), M = nrow(A), K = ncol(A),
+                        X_full = X, A2 = A[, (nrow(A) + 1):ncol(A)], Z = Z)
+           fit <- stan(file = model, data = data, ...)
+
+           if (verbose) {
+             print(fit)
+             plot(fit)
+             plot(fit, plotfun = "trace")
+             pairs(fit, pars = c("theta[1]", "theta[2]", "theta[3]"))
+             pairs(fit, pars = c("theta[4]", "theta[5]", "theta[6]"))
+           }
+           return(fit)
+         },
+         Gibbs = {
+           samples <- gibbs(X, Z, ...)
+           return(samples)
+         },
+         stop('Unknown method. Please use "HMC" or "Gibbs".')
+  )
+}
+
+gibbs <- function(X, Z, N1, N2) {
   A <- mvp.matrix(ncol(X))
-
-  Y2 <- matrix(0, nrow(X), ncol(A) - nrow(A))
-  Y1 <- mvp.get.Y1(X, Y2, A)
-  Y <- cbind(Y1, Y2)
-
+  Y2 <- matrix(0, nrow(X), ncol(A) - nrow(A)) # 2 lines deleted here, if error check back
 
   if (is.null(Z)) {
 
     samples <- matrix(NA, N1, ncol(A))
     theta <- rep(1, ncol(A)) # c(3, 4, 5, 2, 8, 5)
+
+    cov
+
 
     for (n in 1:N1) {
       cat(paste0(n," "))
@@ -56,7 +80,7 @@ mvp.fit <- function(X, Z = NULL, N1 = 100, N2 = 100) {
       Y <- cbind(Y1, Y2)
 
       for (j in 1:ncol(X)) {
-        ss <- metrop(function(b) sum(Y1[, j] * (Z %*% b) - exp(Z %*% b)), beta[, j], N2 * 1)$batch
+        ss <- mcmc::metrop(function(b) sum(Y1[, j] * (Z %*% b) - exp(Z %*% b)), beta[, j], N2 * 1)$batch
         beta[, j] <- ss[nrow(ss), ]
       }
 
@@ -71,6 +95,7 @@ mvp.fit <- function(X, Z = NULL, N1 = 100, N2 = 100) {
 
 ############################## PRIVATE HELPER FUNCTIONS ##############################
 
+#' @export
 met.hast.disc <- function(p, x, N = 10000) {
   D <- length(x)
   samples <- matrix(NA, N, D)
